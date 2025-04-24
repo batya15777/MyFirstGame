@@ -15,7 +15,6 @@ public class HomeScreen extends JPanel{
 //        אולי לא צריך את הכותרת ונעשה שגם ההוראות יהיו בכתפור
 //        JLabel jLabel = new JLabel("הוראות");
         JButton jButton = new JButton("INSTRUCTION");
-//        setBackground(Color.CYAN);
 
 //        jLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         jButton.setAlignmentX(Component.CENTER_ALIGNMENT);
