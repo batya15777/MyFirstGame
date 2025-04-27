@@ -3,14 +3,23 @@ package org.example;
 import java.awt.*;
 
 public class SeaCreature extends GameObject implements Runnable{
+    boolean isRunning = true;
+    int directionX = 1;
+    int directionY = -1;
     @Override
     void update() {
-
+     if(isRunning)
+     {
+       this.setX(getX() + directionX*5);
+       /// border
+       this.setY(getY() + directionY * 5);
+         /// border
+     }
     }
 
     @Override
     void draw(Graphics g) {
-
+        g.drawImage(getImage(),getX(),getY(),getWidth(),getHeight(),null);
     }
 
     @Override
@@ -26,6 +35,11 @@ public class SeaCreature extends GameObject implements Runnable{
 
             }
         }
+    }
+
+    public void setRunning(boolean isRunning)
+    {
+        this.isRunning = isRunning;
     }
 
 

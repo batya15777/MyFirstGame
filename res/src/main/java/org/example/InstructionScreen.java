@@ -24,9 +24,7 @@ public class InstructionScreen extends JPanel {
         setOpaque(false);
         img = new ImageIcon(getClass().getResource("/second.PNG")).getImage();
 
-        // רווח מלמעלה
 
-        // TextArea להוראות
         JTextArea instructions = new JTextArea(
                 "Welcome to the Little Mermaid game!\n" +
                         "Your goal is to collect all the pearls.\n" +
@@ -62,6 +60,8 @@ public class InstructionScreen extends JPanel {
              GameScreen game = new GameScreen(frame);
             frame.setContentPane(game);
             frame.revalidate();
+            game.requestFocusInWindow();
+            game.startGame();
                 }
         );
         add(Box.createVerticalStrut(100));

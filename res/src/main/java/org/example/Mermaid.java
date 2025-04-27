@@ -16,7 +16,7 @@ public class Mermaid extends GameObject{
         this.setY(y);
         this.setWidth(40);
         this.setHeight(40);
-        this.setImage(new ImageIcon("").getImage());
+        this.setImage(new ImageIcon(getClass().getResource("/mermaid.jpeg")).getImage());
     }
 
     void setDirection(int dx, int dy)
@@ -28,6 +28,7 @@ public class Mermaid extends GameObject{
     void update() {
       this.setX(this.getX() + dx);
       this.setY(this.getY() + dy);
+      setDirection(0,0);
     }
 
     @Override
