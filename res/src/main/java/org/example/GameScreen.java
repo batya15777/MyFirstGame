@@ -45,8 +45,7 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
             mermaid.setX(5);
         }
 
-
-
+//לבדוק אולי במקום לעשות ערכים במספרים לישות מתודה מגדילה לי את הס או מקטינה וכנל ל y
     }
 
     @Override

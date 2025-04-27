@@ -10,15 +10,25 @@ public class HomeScreen extends JPanel{
     {
         BoxLayout boxLayout = new BoxLayout(this,BoxLayout.Y_AXIS);
         setLayout(boxLayout);
-        img = new ImageIcon(("src/images.png")).getImage();
 
-//        אולי לא צריך את הכותרת ונעשה שגם ההוראות יהיו בכתפור
-//        JLabel jLabel = new JLabel("הוראות");
-        JButton jButton = new JButton("INSTRUCTION");
+        img = new ImageIcon(getClass().getResource("/first.PNG")).getImage();
+
+
+        ImageIcon button = new ImageIcon(getClass().getResource("/button1.png"));
+        Image scaledImage = button.getImage().getScaledInstance(350,200,Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        JButton jButton = new JButton(scaledIcon);
+        jButton.setBorderPainted(false);
+        jButton.setContentAreaFilled(false);
+        jButton.setFocusPainted(false);
+        jButton.setOpaque(false);
 
 //        jLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        jButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        jButton.setAlignmentX(0.3f);
+
         add(Box.createVerticalGlue());
+        add(Box.createVerticalStrut(200));
 //        add(jLabel);
         add(jButton);
         add(Box.createVerticalGlue());
