@@ -11,7 +11,7 @@ public class Pearls extends GameObject {
         this.setY(y);
         this.setWidth(20);
         this.setHeight(20);
-        this.setImage(new ImageIcon("").getImage());
+        this.setImage(new ImageIcon(getClass().getResource("/peral.png")).getImage());
 
     }
     @Override
@@ -21,8 +21,9 @@ public class Pearls extends GameObject {
 
     @Override
     void draw(Graphics g) {
-
+        g.drawImage(getImage(),getX(),getY(),getWidth(),getHeight(),null);
     }
+
 
 
 //     כשאני מתודה אבסטרקטית במחלקה אבסטרקטית שלי אני אהיה חייבת לממש אותה כאן

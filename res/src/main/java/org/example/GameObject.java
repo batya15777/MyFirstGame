@@ -8,11 +8,20 @@ public abstract class GameObject  {
     private int x;
     private  int y;
     private Image image;
+    private int dx =0 ;
+    private int dy = 0;
+    private  int lastDx;
     abstract void update();
     abstract void draw(Graphics g);
 
     Rectangle getBounds(){
         return new Rectangle(x,y,width,height);
+    }
+    public int getDx(){
+        return dx;
+    }
+    public int getDy(){
+        return dy;
     }
 
     public int getHeight() {
@@ -54,5 +63,6 @@ public abstract class GameObject  {
     public void setImage(Image image) {
         this.image = image;
     }
-//    לעשות מתודה אבסטרקטית לא לשכוח
+
+
 }

@@ -10,9 +10,18 @@ public class SeaCreature extends GameObject implements Runnable{
     void update() {
      if(isRunning)
      {
-       this.setX(getX() + directionX*5);
+         if()
+         this.setX(getX() + (directionX * 3));
+
+         if(getX() < 0 || getX() + directionX*5  >= 900) {
+             directionX *=-1;
+             System.out.println("else1");
+         }
        /// border
-       this.setY(getY() + directionY * 5);
+         this.setY((getY() + directionY * 3));
+        if(getY() <0 || (getY() + directionY * 5 > 720) ) {
+            directionY *=-1;
+        }
          /// border
      }
     }

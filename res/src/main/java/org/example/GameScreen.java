@@ -13,6 +13,7 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
     private Mermaid mermaid;
     private List<Pearls> pearlsList;
     private List<Shark> sharkList;
+
     private List<Jellyfish> jellyfishList;
     private boolean running = true;
     private boolean paused = false;
@@ -20,8 +21,9 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
     private Image bgImage ;
     private final int moveOfStep = 15;
     private final int NUMBER_OF_SHRAK = 3;
-    private final int NUMBER_OF_JELLYFISH = 1;
+    private final int NUMBER_OF_JELLYFISH = 2;
     private final int NUMBER_OF_PEARLES = 10;
+    boolean pause = false;
 
 
 
@@ -36,14 +38,14 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
     Random rand = new Random();
     for(int i =0; i<NUMBER_OF_SHRAK;i++)
     {
-        Shark shrak = new Shark(rand.nextInt(900)+50,rand.nextInt(700)+50);
+        Shark shrak = new Shark(rand.nextInt(900),rand.nextInt(700));
         sharkList.add(shrak);
         Thread th = new Thread(shrak);
         th.start();
     }
         for(int i =0; i<NUMBER_OF_JELLYFISH;i++)
         {
-            Jellyfish jFish = new Jellyfish(rand.nextInt(900)+50,rand.nextInt(700)+50);
+            Jellyfish jFish = new Jellyfish(rand.nextInt(900),rand.nextInt(700));
             jellyfishList.add(jFish);
             Thread th = new Thread(jFish);
             th.start();
@@ -68,9 +70,11 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(bgImage,0,0,getWidth(),getHeight(),this);
+        g.drawString("Score: "+mermaid.getScore(),10,20);
         mermaid.draw(g);
         for(Shark shark : sharkList) shark.draw(g);
         for(Jellyfish jellyfish : jellyfishList) jellyfish.draw(g);
+        for(Pearls pearl : pearlsList) pearl.draw(g);
     }
 
     @Override
@@ -80,9 +84,8 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("keyPreessed");
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-
+            pause = !paused;
         }
         if(e.getKeyCode() == KeyEvent.VK_DOWN) {
               mermaid.setDirection(0,+moveOfStep);
@@ -96,7 +99,8 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
         if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
             mermaid.setDirection(moveOfStep,0);
         }
-        mermaid.update();
+        if(!pause)
+           mermaid.update();
 
 //לבדוק אולי במקום לעשות ערכים במספרים לישות מתודה מגדילה לי את הס או מקטינה וכנל ל y
     }
@@ -110,9 +114,11 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
     public void run() {
         while (running)
         {
+            if(!pause) {
 //            mermaid.update();
-            checkCollision();
-            repaint();
+                checkCollision();
+                repaint();
+            }
         }
         try
         {

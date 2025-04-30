@@ -10,7 +10,7 @@ public class Jellyfish extends SeaCreature
         this.setY(y);
         this.setWidth(120);
         this.setHeight(60);
-        this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("/jellyfish.jpeg"))).getImage());
+        this.setImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("/jellyfish.png"))).getImage());
 
 
 

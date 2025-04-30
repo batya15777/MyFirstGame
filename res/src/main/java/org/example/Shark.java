@@ -9,7 +9,7 @@ public class Shark extends SeaCreature{
         this.setY(y);
         this.setWidth(120);
         this.setHeight(60);
-        this.setImage(new ImageIcon(getClass().getResource("/shark.jpeg")).getImage());
+        this.setImage(new ImageIcon(getClass().getResource("/shark.png")).getImage());
 
     }
 
