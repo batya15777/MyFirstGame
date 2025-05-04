@@ -10,7 +10,6 @@ public abstract class GameObject  {
     private Image image;
     private int dx =0 ;
     private int dy = 0;
-    private  int lastDx;
     abstract void update();
     abstract void draw(Graphics g);
 

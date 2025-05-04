@@ -12,41 +12,51 @@ import java.util.Random;
 public class GameScreen extends JPanel implements Runnable, KeyListener {
     private Mermaid mermaid;
     private List<Pearls> pearlsList;
-    private List<Shark> sharkList;
-
-    private List<Jellyfish> jellyfishList;
+    private List<SeaCreature> seaCreatures;
+    private List<Lives> lives;
     private boolean running = true;
     private boolean paused = false;
     private Thread gameThread;
     private Image bgImage ;
-    private final int moveOfStep = 15;
+    private final int MOVE_OF_STEP = 15;
     private final int NUMBER_OF_SHRAK = 3;
     private final int NUMBER_OF_JELLYFISH = 2;
     private final int NUMBER_OF_PEARLES = 10;
-    boolean pause = false;
-
+    private JFrame frame;
+    private SoundPlayer backgroundMusic;
 
 
     GameScreen(JFrame frmae) {
+        backgroundMusic = new  SoundPlayer("electronic-background-1min-seamless.wav");
+        backgroundMusic.playLoop();
+    this.frame = frmae;
     setFocusable(true);
     addKeyListener(this);
     mermaid = new Mermaid(100,100);
     bgImage = new ImageIcon(getClass().getResource("/bgImage.png")).getImage();
     pearlsList = new ArrayList<>();
-    jellyfishList = new ArrayList<>();
-    sharkList = new ArrayList<>();
+    lives = new ArrayList<>();
+
+
+
+    seaCreatures = new ArrayList<>();
     Random rand = new Random();
+    for(int i =0; i<mermaid.getLives();i++)
+    {
+         lives.add(new Lives(10 + i*35,20));
+
+    }
     for(int i =0; i<NUMBER_OF_SHRAK;i++)
     {
         Shark shrak = new Shark(rand.nextInt(900),rand.nextInt(700));
-        sharkList.add(shrak);
+        seaCreatures.add(shrak);
         Thread th = new Thread(shrak);
         th.start();
     }
         for(int i =0; i<NUMBER_OF_JELLYFISH;i++)
         {
             Jellyfish jFish = new Jellyfish(rand.nextInt(900),rand.nextInt(700));
-            jellyfishList.add(jFish);
+            seaCreatures.add(jFish);
             Thread th = new Thread(jFish);
             th.start();
         }
@@ -70,10 +80,21 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(bgImage,0,0,getWidth(),getHeight(),this);
-        g.drawString("Score: "+mermaid.getScore(),10,20);
+        g.setColor(Color.white);
+        g.setFont(new Font("Ariel",Font.BOLD,24));
+        Image scoreIcon = new ImageIcon(getClass().getResource("/score.png")).getImage();
+        g.drawImage(scoreIcon,868,8,30,30,this);
+        g.drawString("x "+mermaid.getScore(),900,30);
+
+
+
+
+
+
+
         mermaid.draw(g);
-        for(Shark shark : sharkList) shark.draw(g);
-        for(Jellyfish jellyfish : jellyfishList) jellyfish.draw(g);
+        for(SeaCreature sea : seaCreatures) sea.draw(g) ;
+        for(Lives live : lives) live.draw(g);
         for(Pearls pearl : pearlsList) pearl.draw(g);
     }
 
@@ -81,28 +102,50 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
     public void keyTyped(KeyEvent e) {
 
     }
+    public void stopAllCreature(boolean pause)
+    {
+        for(SeaCreature sea : seaCreatures)
+        {
+            sea.setRunning(!paused);
+        }
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-            pause = !paused;
-        }
-        if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-              mermaid.setDirection(0,+moveOfStep);
-        }
-        if(e.getKeyCode() == KeyEvent.VK_UP) {
-            mermaid.setDirection(0,-moveOfStep);
-        }
-        if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-            mermaid.setDirection(-moveOfStep,0);
-        }
-        if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            mermaid.setDirection(moveOfStep,0);
-        }
-        if(!pause)
-           mermaid.update();
 
-//לבדוק אולי במקום לעשות ערכים במספרים לישות מתודה מגדילה לי את הס או מקטינה וכנל ל y
+
+            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                mermaid.setDirection(0, +MOVE_OF_STEP);
+            }
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                mermaid.setDirection(0, -MOVE_OF_STEP);
+            }
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                mermaid.setDirection(-MOVE_OF_STEP, 0);
+            }
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                mermaid.setDirection(MOVE_OF_STEP, 0);
+            }
+        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+            paused = !paused;
+            stopAllCreature(paused);
+            SoundPlayer pauseSound = new SoundPlayer("pause.wav");
+            pauseSound.playOne();
+            if (paused) {
+                backgroundMusic.stop();
+
+            }else {
+                backgroundMusic.playLoop();
+
+            }
+
+        }
+        if(e.getKeyCode() != KeyEvent.VK_SPACE && !paused) {
+            mermaid.update();
+        }
+
+
+
     }
 
     @Override
@@ -114,15 +157,14 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
     public void run() {
         while (running)
         {
-            if(!pause) {
-//            mermaid.update();
+
                 checkCollision();
                 repaint();
-            }
+
         }
         try
         {
-            Thread.sleep(20);
+            Thread.sleep(30);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -140,33 +182,43 @@ public class GameScreen extends JPanel implements Runnable, KeyListener {
             Pearls pearl = iter.next();
             if(mermaid.getBounds().intersects(pearl.getBounds()))
             {
-                mermaid.setScore(mermaid.getScore()+10);
+                SoundPlayer collectSound = new SoundPlayer("pearlSound.wav");
+                collectSound.playOne();
+
+                        mermaid.setScore(mermaid.getScore()+10);
                 iter.remove();
             }
 
         }
-        for(Shark shark: sharkList){
-            if(mermaid.getBounds().intersects(shark.getBounds())){
+        for(SeaCreature sea: seaCreatures){
+            if(mermaid.getBounds().intersects(sea.getBounds())){
+                SoundPlayer hitSound = new SoundPlayer("collisions.wav");
+                hitSound.playOne();
+                lives.remove(lives.size()-1);
                 mermaid.setLives(mermaid.getLives()-1);
                 mermaid.setX(50);
                 mermaid.setY(50);
                 if(mermaid.getLives()<=0)
                 {
                     running=false;
+                    stopAllCreature(true);
+                    backgroundMusic.stop();
+                    SoundPlayer gameOver = new SoundPlayer("gameOver.wav");
+                    gameOver.playOne();
+                    try {
+                        GameOver gmOver =new GameOver(frame);
+                        frame.setContentPane(gmOver);
+                        frame.remove(this);
+                        frame.revalidate();
+                    } catch (InterruptedException e) {
+                        System.out.println("failed");
+                        throw new RuntimeException(e);
+                    }
+
                 }
             }
         }
-        for(Jellyfish jellyfish: jellyfishList){
-            if(mermaid.getBounds().intersects(jellyfish.getBounds())){
-                mermaid.setLives(mermaid.getLives()-1);
-                mermaid.setX(50);
-                mermaid.setY(50);
-                if(mermaid.getLives()<=0)
-                {
-                    running=false;
-                }
-            }
-        }
+
     }
 
     ;

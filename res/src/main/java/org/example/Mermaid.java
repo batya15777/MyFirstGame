@@ -9,8 +9,9 @@ import java.util.logging.Logger;
 
 public class Mermaid extends GameObject{
     private int score = 0;
-    private int lives = Integer.MAX_VALUE;
+    private int lives = 3;
     private int dx, dy;
+    private boolean facingLeft = false;
 
 
 
@@ -27,12 +28,15 @@ public class Mermaid extends GameObject{
     {
         this.dx = dx;
         this.dy = dy;
+
+        if (dx != 0){
+            facingLeft = dx < 0;
+        }
     }
     @Override
     void update() {
-      this.setX(this.getX() + dx);
-      this.setY(this.getY() + dy);
-//      setDirection(0,0);
+        if (getX() +dx>= 0 && (getX() +dx  <= 900)) {this.setX(this.getX() + dx);}
+        if (getY() +dy >= 0 && (getY()+dy  <= 700)) {  this.setY(this.getY() + dy);}
     }
 
     @Override
@@ -43,8 +47,14 @@ public class Mermaid extends GameObject{
         int y = getY();
         int width = getWidth();
         int height = getHeight();
-        if (dx < 0){
-            g2d.drawImage(image,x + width ,y , -width ,height,null);
+        if (facingLeft){
+          g2d.translate(x + width , y);
+          g2d.scale(-1 ,1);
+          g2d.drawImage(image , 0 ,0 , width ,height,null);
+          g2d.scale(-1 ,1);
+          g2d.translate(-(x + width) , -y);
+
+
         }else {
             g2d.drawImage(image , x ,y , width ,height,null);
 
@@ -62,7 +72,6 @@ public class Mermaid extends GameObject{
 
 
 
-    /// //
     public int getLives() {
         return lives;
     }

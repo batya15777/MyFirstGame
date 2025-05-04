@@ -3,15 +3,15 @@ package org.example;
 import javax.swing.*;
 import java.awt.*;
 
-public class Pearls extends GameObject {
+public class Lives extends GameObject {
 
-    Pearls(int x,int y)
+    Lives(int x,int y)
     {
         this.setX(x);
         this.setY(y);
-        this.setWidth(20);
-        this.setHeight(20);
-        this.setImage(new ImageIcon(getClass().getResource("/peral.png")).getImage());
+        this.setWidth(40);
+        this.setHeight(40);
+        this.setImage(new ImageIcon(getClass().getResource("/live.png")).getImage());
 
     }
     @Override

@@ -24,16 +24,15 @@ public class HomeScreen extends JPanel{
         jButton.setFocusPainted(false);
         jButton.setOpaque(false);
 
-//        jLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         jButton.setAlignmentX(0.3f);
 
         add(Box.createVerticalGlue());
         add(Box.createVerticalStrut(200));
-//        add(jLabel);
         add(jButton);
         add(Box.createVerticalGlue());
-
+        SoundPlayer clickSound = new SoundPlayer("buttonClick.wav");
         jButton.addActionListener(e->{
+            clickSound.playOne();
         InstructionScreen instructionPanel = new InstructionScreen(frame);
         frame.setContentPane(instructionPanel);
         remove(this);
